@@ -9,6 +9,7 @@ from chainer import training
 from chainer.training import extensions
 
 from sample_net import MLP
+from binary_net import BinaryMLP
 
 def main():
     parser = argparse.ArgumentParser(description='Chainer example: MNIST')
@@ -40,6 +41,8 @@ def main():
     # iteration, which will be used by the PrintReport extension below.
     if args.mode == 'float':
       model = L.Classifier(MLP(784, args.unit, 10))
+    else:
+      model = L.Classifier(BinaryMLP(784, args.unit, 10))
 
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()  # Make a specified GPU current
