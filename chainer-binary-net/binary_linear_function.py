@@ -32,6 +32,14 @@ class BinaryLinearFunction(function.Function):
         x = _as_mat(inputs[0])
         W = inputs[1]
         Wb = numpy.where(W>=0, 1, -1).astype(numpy.float32, copy=False)
+
+        # hist_x_count, hist_x_guide = numpy.histogram(x)
+        # print("X", hist_x_count)
+        # hist_w_count, hist_w_guide = numpy.histogram(W)
+        # print("W", hist_w_count)
+        # hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
+        # print("Wb", hist_wb_count)
+
         y = x.dot(Wb.T).astype(x.dtype, copy=False)
         if len(inputs) == 3:
             b = inputs[2]
