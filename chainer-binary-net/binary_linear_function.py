@@ -31,9 +31,8 @@ class BinaryLinearFunction(function.Function):
     def forward(self, inputs):
         x = _as_mat(inputs[0])
         W = inputs[1]
-        xb = numpy.where(x>=0, 1, -1).astype(numpy.float32, copy=False)
         Wb = numpy.where(W>=0, 1, -1).astype(numpy.float32, copy=False)
-        y = xb.dot(Wb.T).astype(x.dtype, copy=False)
+        y = x.dot(Wb.T).astype(x.dtype, copy=False)
         if len(inputs) == 3:
             b = inputs[2]
             y += b
@@ -42,12 +41,11 @@ class BinaryLinearFunction(function.Function):
     def backward(self, inputs, grad_outputs):
         x = _as_mat(inputs[0])
         W = inputs[1]
-        xb = numpy.where(x>=0, 1, -1).astype(numpy.float32, copy=False)
         Wb = numpy.where(W>=0, 1, -1).astype(numpy.float32, copy=False)
         gy = grad_outputs[0]
 
         gx = gy.dot(Wb).astype(x.dtype, copy=False).reshape(inputs[0].shape)
-        gW = gy.T.dot(xb).astype(W.dtype, copy=False)
+        gW = gy.T.dot(x).astype(W.dtype, copy=False)
         if len(inputs) == 3:
             gb = gy.sum(0)
             return gx, gW, gb
