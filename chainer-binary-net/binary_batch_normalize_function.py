@@ -21,14 +21,7 @@ class BatchNormalizationFunction(function.Function):
                  decay=0.9, use_cudnn=True):
         self.running_mean = mean
         self.running_var = var
-
-        # If train is true, use batch statistics (training mode). Otherwise, if
-        # false, use the supplied mean and variance.
         self.train = train
-        # Note: cuDNN v5 requires that eps be greater than 1e-5. Otherwise, an
-        # error will occur.
-        # See CUDNN_BN_MIN_EPSILON value in cudnn.h to verify minimum allowable
-        # value.
         self.eps = eps
         self.use_cudnn = use_cudnn
         self.mean_cache = None
