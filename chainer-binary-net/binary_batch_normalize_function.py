@@ -256,78 +256,11 @@ class BatchNormalizationFunction(function.Function):
 
 def batch_normalization(x, gamma, beta, eps=2e-5, running_mean=None,
                         running_var=None, decay=0.9, use_cudnn=True):
-    """Batch normalization function.
-
-    It takes the input variable ``x`` and two parameter variables ``gamma`` and
-    ``beta``. The input must have the batch size and the features (or channels)
-    as the first two dimensions of its shape. The input can have more than two
-    dimensions, where the remaining dimensions are considered as spatial
-    dimensions, which are considered as a part of the batch size. That is,
-    the total batch size will be considered to be the product of all
-    dimensions except the second dimension.
-
-    Note: If this function is called, it will not be possible to access the
-    updated running mean and variance statistics, because they are members
-    of the function object, which cannot be accessed by the caller.
-    If it is desired to access the updated running statistics, it is necessary
-    to get a new instance of the function object, call the object, and then
-    access the running_mean and/or running_var attributes. See the
-    corresponding Link class for an example of how to do this.
-
-    Args:
-        x (Variable): The input variable.
-        gamma (Variable): The scaling parameter of normalized data.
-        beta (Variable): The shifting parameter of scaled normalized data.
-        eps (float): Epsilon value for numerical stability.
-        running_mean (array): The running average of the mean. This is a
-            running average of the mean over several mini-batches using
-            the decay parameter. If ``None``, the running average is not
-            computed. If this is ``None``, then ``runnng_var`` must also
-            be ``None``.
-        running_var (array): The running average of the variance. This is a
-            running average of the variance over several mini-batches using
-            the decay parameter. If ``None``, the running average is not
-            computed. If this is ``None``, then ``running_mean`` must also
-            be ``None``.
-        decay (float): Decay rate of moving average. It is used during
-            training.
-        use_cudnn (bool): If ``True`` and cuDNN is enabled, then this function
-            uses cuDNN as the core implementation.
-
-
-    See: `Batch Normalization: Accelerating Deep Network Training by Reducing\
-          Internal Covariate Shift <http://arxiv.org/abs/1502.03167>`_
-
-    .. seealso:: :class:`links.BatchNormalization`
-
-    """
     return BatchNormalizationFunction(eps, running_mean, running_var, True,
                                       decay, use_cudnn)(x, gamma, beta)
 
 
 def fixed_batch_normalization(x, gamma, beta, mean, var, eps=2e-5,
                               use_cudnn=True):
-    """Batch normalization function with fixed statistics.
-
-    This is a variant of batch normalization, where the mean and variance
-    statistics are given by the caller as fixed variables. This is
-    used on testing mode of the batch normalization layer, where batch
-    statistics cannot be used for prediction consistency.
-
-    Args:
-        x (Variable): The input variable.
-        gamma (Variable): The scaling parameter of normalized data.
-        beta (Variable): The shifting parameter of scaled normalized data.
-        mean (Variable): The shifting parameter of input.
-        var (Variable): The square of scaling parameter of input.
-        eps (float): Epsilon value for numerical stability.
-        use_cudnn (bool): If ``True`` and cuDNN is enabled, then this function
-            uses cuDNN as the core implementation.
-
-    .. seealso::
-       :func:`functions.batch_normalization`,
-       :class:`links.BatchNormalization`
-
-    """
     return BatchNormalizationFunction(eps, None, None, False, 0.0,
                                       use_cudnn)(x, gamma, beta, mean, var)
