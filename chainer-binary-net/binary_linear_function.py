@@ -33,6 +33,7 @@ class BinaryLinearFunction(function.Function):
         W = inputs[1]
         Wb = numpy.where(W>=0, 1, -1).astype(numpy.float32, copy=False)
 
+        # print("================")
         # hist_x_count, hist_x_guide = numpy.histogram(x)
         # print("X", hist_x_count)
         # hist_w_count, hist_w_guide = numpy.histogram(W)
