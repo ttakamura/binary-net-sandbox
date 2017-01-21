@@ -95,5 +95,8 @@ def main():
     # Run the training
     trainer.run()
 
+    # Export
+    chainer.serializers.save_npz('result/binary_nn.model', model)
+
 if __name__ == '__main__':
     main()
