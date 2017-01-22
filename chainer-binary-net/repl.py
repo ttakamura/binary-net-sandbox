@@ -12,19 +12,10 @@ from chainer import training
 from chainer.training import extensions
 from binary_net import BinaryMLP
 
-def write_liner_W(data, filename):
-  d = bytearray()
-  for row in data:
-    for val in row:
-      d += struct.pack('f',val)
-  with open(filename,'wb') as f:
-    f.write(d)
-
 argvs = sys.argv
 
 unit = 1000
 model = L.Classifier(BinaryMLP(784, unit, 10))
 chainer.serializers.load_npz(argvs[1], model)
 
-# --- L1 -----
-write_liner_W(model.predictor.l1.W.data, 'result/binary_net.l1.W.dat')
+code.InteractiveConsole(globals()).interact()
