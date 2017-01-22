@@ -11,11 +11,11 @@ from bst import bst
 class BinaryMLP(chainer.Chain):
     def __init__(self, n_in, n_units, n_out):
       super(BinaryMLP, self).__init__(
-        l1=BinaryLinear(n_in, n_units),  # first layer
+        l1=BinaryLinear(n_in, n_units, nobias=True),  # first layer
         b1=BinaryBatchNormalization(n_units),
-        l2=BinaryLinear(n_units, n_units),  # second layer
+        l2=BinaryLinear(n_units, n_units, nobias=True),  # second layer
         b2=BinaryBatchNormalization(n_units),
-        l3=BinaryLinear(n_units, n_out),  # output layer
+        l3=BinaryLinear(n_units, n_out, nobias=True),  # output layer
         b3=BinaryBatchNormalization(n_out),
       )
       self.train = True
