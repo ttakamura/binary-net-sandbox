@@ -16,6 +16,6 @@ argvs = sys.argv
 
 unit = 1000
 model = L.Classifier(BinaryMLP(784, unit, 10))
-chainer.serializers.load_npz(argvs[1], model)
+# chainer.serializers.load_npz(argvs[1], model)
 
-code.InteractiveConsole(globals()).interact()
+# code.InteractiveConsole(globals()).interact()
