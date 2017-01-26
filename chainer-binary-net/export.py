@@ -29,3 +29,12 @@ chainer.serializers.load_npz(argvs[1], model)
 
 # --- L1 -----
 write_liner_W(model.predictor.l1.W.data, 'result/binary_net.l1.W.dat')
+write_liner_W(model.predictor.l2.W.data, 'result/binary_net.l2.W.dat')
+write_liner_W(model.predictor.l3.W.data, 'result/binary_net.l3.W.dat')
+
+
+
+predictor/b1/avg_mean.npy
+predictor/b1/avg_var.npy
+predictor/b1/beta.npy
+predictor/b1/gamma.npy
