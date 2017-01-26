@@ -14,6 +14,7 @@ from binary_net import BinaryMLP
 
 def write_liner_W(data, filename):
   d = bytearray()
+  data = np.where(data >= 0, 1, -1).astype(np.float32, copy=False)
   for row in data:
     for val in row:
       d += struct.pack('f',val)

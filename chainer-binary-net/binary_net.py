@@ -21,6 +21,7 @@ class BinaryMLP(chainer.Chain):
       self.train = True
 
     def __call__(self, x):
+      x  = x * 256
       h1 = bst(self.b1(self.l1(x), test=not self.train))
       h2 = bst(self.b2(self.l2(h1), test=not self.train))
       return self.b3(self.l3(h2), test=not self.train)

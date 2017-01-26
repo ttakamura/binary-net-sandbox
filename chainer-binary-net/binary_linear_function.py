@@ -35,11 +35,9 @@ class BinaryLinearFunction(function.Function):
 
         # print("================")
         # hist_x_count, hist_x_guide = numpy.histogram(x)
-        # print("X", hist_x_count)
-        # hist_w_count, hist_w_guide = numpy.histogram(W)
-        # print("W", hist_w_count)
+        # print("X", hist_x_count, hist_x_guide)
         # hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
-        # print("Wb", hist_wb_count)
+        # print("Wb", hist_wb_count, hist_wb_guide)
 
         y = x.dot(Wb.T).astype(x.dtype, copy=False)
         if len(inputs) == 3:
