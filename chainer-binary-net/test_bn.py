@@ -11,16 +11,21 @@ def setup():
   return x, avg_mean, avg_var, beta, gamma
 
 def bn(x, avg_mean, avg_var, beta, gamma):
-  x_hat = (x - avg_mean) / math.sqrt(avg_var + 0.001)
+  x_hat = (x - avg_mean) / math.sqrt(avg_var + 0.0001)
   y = (gamma * x_hat) + beta
   return y
 
 def bn2(x, avg_mean, avg_var, beta, gamma):
-  t = avg_mean + ((beta * math.sqrt(avg_var + 0.001)) / gamma)
+  t = avg_mean - ((beta * math.sqrt(avg_var + 0.0001)) / gamma)
   y = x - t
   return y
 
 for i in range(0, 50):
   x, avg_mean, avg_var, beta, gamma = setup()
   print("-------")
-  print(bn(x, avg_mean, avg_var, beta, gamma), bn2(x, avg_mean, avg_var, beta, gamma))
+  a = bn(x, avg_mean, avg_var, beta, gamma)
+  b = bn2(x, avg_mean, avg_var, beta, gamma)
+  if (a > 0.0) == (b > 0.0):
+    print("OK")
+  else:
+    print(a,b)
