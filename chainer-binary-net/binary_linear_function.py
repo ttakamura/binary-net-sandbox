@@ -32,17 +32,19 @@ class BinaryLinearFunction(function.Function):
         x = _as_mat(inputs[0])
         W = inputs[1]
         Wb = numpy.where(W>=0, 1, -1).astype(numpy.float32, copy=False)
-
-        # print("================")
-        # hist_x_count, hist_x_guide = numpy.histogram(x)
-        # print("X", hist_x_count, hist_x_guide)
-        # hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
-        # print("Wb", hist_wb_count, hist_wb_guide)
-
         y = x.dot(Wb.T).astype(x.dtype, copy=False)
         if len(inputs) == 3:
             b = inputs[2]
             y += b
+
+        print("================")
+        hist_x_count, hist_x_guide = numpy.histogram(x)
+        print("X", hist_x_count, hist_x_guide)
+        hist_y_count, hist_y_guide = numpy.histogram(y)
+        print("y", hist_y_count, hist_y_guide)
+        hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
+        print("Wb", hist_wb_count, hist_wb_guide)
+
         return y,
 
     def backward(self, inputs, grad_outputs):
