@@ -4,6 +4,7 @@ import code
 import sys
 import struct
 import numpy as np
+import json
 
 import chainer
 import chainer.functions as F
@@ -22,9 +23,13 @@ if len(argvs) > 1:
 
   x = np.ones((1, 784), dtype=np.float32) * 128
   y = model.predictor.l1(x)
-  print("y[0] {}".format(y.data[0, 0]))
-  print("y[500] {}".format(y.data[0, 500]))
+  print("y[100] {}".format(y.data[0, 500]))
+  print("y[200] {}".format(y.data[0, 500]))
+  print("y[300] {}".format(y.data[0, 500]))
+  print("y[400] {}".format(y.data[0, 500]))
   print("y[999] {}".format(y.data[0, 999]))
+  with open("tmp/output_y.txt", "w") as f:
+    f.writelines([str(int(val))+"\n" for val in y.data[0, :].tolist()])
 
   z = model.predictor.b1(y)
   zb = np.where(z.data >= 0, 1, -1).astype(np.float32, copy=False)
