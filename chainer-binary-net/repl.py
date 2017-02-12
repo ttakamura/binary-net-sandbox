@@ -13,6 +13,24 @@ from chainer import training
 from chainer.training import extensions
 from binary_net import BinaryMLP
 
+def bn1(x, data):
+  avg_mean = data.avg_mean
+  avg_var  = data.avg_var
+  beta     = data.beta.data
+  gamma    = data.gamma.data
+  x_hat = (x - avg_mean) / np.sqrt(avg_var + 0.0001)
+  y = (gamma * x_hat) + beta
+  return y
+
+def bn2(x, data):
+  avg_mean = data.avg_mean
+  avg_var  = data.avg_var
+  beta     = data.beta.data
+  gamma    = data.gamma.data
+  t = avg_mean - ((beta * np.sqrt(avg_var + 0.0001)) / gamma)
+  y = x - t
+  return y
+
 argvs = sys.argv
 
 unit = 1000
@@ -26,21 +44,22 @@ if len(argvs) > 1:
   print("y[100] {}".format(y.data[0, 500]))
   print("y[200] {}".format(y.data[0, 500]))
   print("y[300] {}".format(y.data[0, 500]))
-  print("y[400] {}".format(y.data[0, 500]))
-  print("y[999] {}".format(y.data[0, 999]))
   with open("tmp/output_y.txt", "w") as f:
     f.writelines([str(int(val))+"\n" for val in y.data[0, :].tolist()])
 
-  z = model.predictor.b1(y)
-  zb = np.where(z.data >= 0, 1, -1).astype(np.float32, copy=False)
-  print("zb[0] {}".format( zb.data[0, 0] ))
-  print("zb[100] {}".format( zb.data[0, 100]))
-  print("zb[200] {}".format( zb.data[0, 200]))
-  print("zb[300] {}".format( zb.data[0, 300]))
-  print("zb[400] {}".format( zb.data[0, 400]))
-  print("zb[500] {}".format( zb.data[0, 500]))
-  print("zb[600] {}".format( zb.data[0, 600]))
-  print("zb[700] {}".format( zb.data[0, 700]))
-  print("zb[999] {}".format( zb.data[0, 999]))
+  z = model.predictor.b1(y, test=True)
+  print("z[100] {}".format( z.data[0, 100]))
+  print("z[200] {}".format( z.data[0, 200]))
+  print("z[300] {}".format( z.data[0, 300]))
+  with open("tmp/output_bn.txt", "w") as f:
+    f.writelines([str(val)+"\n" for val in z.data[0, :].tolist()])
+
+  with open("tmp/output_bn_normal.txt", "w") as f:
+    bn1_z = bn1(y.data[0,:], model.predictor.b1)
+    f.writelines([str(val)+"\n" for val in bn1_z.tolist()])
+
+  with open("tmp/output_bn_thresh.txt", "w") as f:
+    bn2_z = bn2(y.data[0,:], model.predictor.b1)
+    f.writelines([str(val)+"\n" for val in bn2_z.tolist()])
 
 # code.InteractiveConsole(globals()).interact()
