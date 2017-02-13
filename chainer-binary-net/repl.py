@@ -12,6 +12,7 @@ import chainer.links as L
 from chainer import training
 from chainer.training import extensions
 from binary_net import BinaryMLP
+from bst import bst
 
 def bn1(x, data):
   avg_mean = data.avg_mean
@@ -31,35 +32,41 @@ def bn2(x, data):
   y = x - t
   return y
 
-argvs = sys.argv
+def forward_linear(layer, x, path):
+  y = layer(x)
+  with open(path, "w") as f:
+    f.writelines([str(int(val))+"\n" for val in y.data[0, :].tolist()])
+  return y
 
-unit = 1000
+def forward_bn(layer, y, path):
+  z = layer(y, test=True)
+  with open(path, "w") as f:
+    f.writelines([str(val)+"\n" for val in z.data[0, :].tolist()])
+  # with open("tmp/output_bn_normal.txt", "w") as f:
+  #   bn1_z = bn1(y.data[0,:], model.predictor.b1)
+  #   f.writelines([str(val)+"\n" for val in bn1_z.tolist()])
+  # with open("tmp/output_bn_thresh.txt", "w") as f:
+  #   bn2_z = bn2(y.data[0,:], model.predictor.b1)
+  #   f.writelines([str(val)+"\n" for val in bn2_z.tolist()])
+  return z
+
+argvs = sys.argv
+unit  = 1000
 model = L.Classifier(BinaryMLP(784, unit, 10))
 
 if len(argvs) > 1:
   chainer.serializers.load_npz(argvs[1], model)
 
-  x = np.ones((1, 784), dtype=np.float32) * 128
-  y = model.predictor.l1(x)
-  print("y[100] {}".format(y.data[0, 500]))
-  print("y[200] {}".format(y.data[0, 500]))
-  print("y[300] {}".format(y.data[0, 500]))
-  with open("tmp/output_y.txt", "w") as f:
-    f.writelines([str(int(val))+"\n" for val in y.data[0, :].tolist()])
+  x  = np.ones((1, 784), dtype=np.float32) * 128
+  y1 = forward_linear(model.predictor.l1, x, "tmp/output_y.txt")
+  z1 = forward_bn(model.predictor.b1, y1, "tmp/output_bn.txt")
+  h1 = bst(z1)
 
-  z = model.predictor.b1(y, test=True)
-  print("z[100] {}".format( z.data[0, 100]))
-  print("z[200] {}".format( z.data[0, 200]))
-  print("z[300] {}".format( z.data[0, 300]))
-  with open("tmp/output_bn.txt", "w") as f:
-    f.writelines([str(val)+"\n" for val in z.data[0, :].tolist()])
+  y2 = forward_linear(model.predictor.l2, h1, "tmp/output_y2.txt")
+  z2 = forward_bn(model.predictor.b2, y2, "tmp/output_bn2.txt")
+  h2 = bst(z2)
 
-  with open("tmp/output_bn_normal.txt", "w") as f:
-    bn1_z = bn1(y.data[0,:], model.predictor.b1)
-    f.writelines([str(val)+"\n" for val in bn1_z.tolist()])
-
-  with open("tmp/output_bn_thresh.txt", "w") as f:
-    bn2_z = bn2(y.data[0,:], model.predictor.b1)
-    f.writelines([str(val)+"\n" for val in bn2_z.tolist()])
+  y3 = forward_linear(model.predictor.l3, h2, "tmp/output_y3.txt")
+  z3 = forward_bn(model.predictor.b3, y3, "tmp/output_bn3.txt")
 
 # code.InteractiveConsole(globals()).interact()
