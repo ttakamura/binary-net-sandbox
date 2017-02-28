@@ -86,7 +86,7 @@ class BatchNormalizationFunction(function.Function):
         y = gamma * self.x_hat
         y += beta
 
-        if self.train and (not cudnn_updated_running_stats):
+        if self.train:
             m = x.size // gamma.size
             adjust = m / max(m - 1., 1.)  # unbiased estimation
             self.running_mean *= self.decay

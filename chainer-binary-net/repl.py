@@ -69,4 +69,12 @@ if len(argvs) > 1:
   y3 = forward_linear(model.predictor.l3, h2, "tmp/output_y3.txt")
   z3 = forward_bn(model.predictor.b3, y3, "tmp/output_bn3.txt")
 
+#
+# chainer.serializers.load_npz(argvs[1], model)
+# train, test = chainer.datasets.get_mnist()
+# row = train[0]
+# data, teacher = row
+# model.predictor(data.reshape(1, 784))
+#
+
 # code.InteractiveConsole(globals()).interact()
