@@ -42,6 +42,12 @@ def write_batch_norm(data, filename):
   with open(filename,'wb') as f:
     f.write(d)
 
+def write_input_data(data, filename):
+  d = bytearray()
+  d = pack_vector(data, d)
+  with open(filename,'wb') as f:
+    f.write(d)
+
 argvs = sys.argv
 
 unit = 1000
@@ -55,3 +61,7 @@ write_liner_W(model.predictor.l3.W.data, 'result/binary_net.l3.W.dat')
 write_batch_norm(model.predictor.b1, 'result/binary_net.b1.dat')
 write_batch_norm(model.predictor.b2, 'result/binary_net.b2.dat')
 write_batch_norm(model.predictor.b3, 'result/binary_net.b3.dat')
+
+train, test = chainer.datasets.get_mnist()
+data, category = train[1201]
+write_input_data(data, 'result/binary_net.x.1201.{}.dat'.format(category))

@@ -37,13 +37,13 @@ class BinaryLinearFunction(function.Function):
             b = inputs[2]
             y += b
 
-        print("================")
-        hist_x_count, hist_x_guide = numpy.histogram(x)
-        print("X", hist_x_count, hist_x_guide)
-        hist_y_count, hist_y_guide = numpy.histogram(y)
-        print("y", hist_y_count, hist_y_guide)
-        hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
-        print("Wb", hist_wb_count, hist_wb_guide)
+        # print("================")
+        # hist_x_count, hist_x_guide = numpy.histogram(x)
+        # print("X", hist_x_count, hist_x_guide)
+        # hist_y_count, hist_y_guide = numpy.histogram(y)
+        # print("y", hist_y_count, hist_y_guide)
+        # hist_wb_count, hist_wb_guide = numpy.histogram(Wb)
+        # print("Wb", hist_wb_count, hist_wb_guide)
 
         return y,
 
