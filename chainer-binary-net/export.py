@@ -63,5 +63,17 @@ write_batch_norm(model.predictor.b2, 'result/binary_net.b2.dat')
 write_batch_norm(model.predictor.b3, 'result/binary_net.b3.dat')
 
 train, test = chainer.datasets.get_mnist()
-data, category = train[1201]
-write_input_data(data, 'result/binary_net.x.1201.{}.dat'.format(category))
+data, category = train[1206]
+write_input_data(data, 'result/binary_net.x.1206.{}.dat'.format(category))
+
+data, category = train[2001]
+write_input_data(data, 'result/binary_net.x.2001.{}.dat'.format(category))
+
+data, category = train[3000]
+write_input_data(data, 'result/binary_net.x.3000.{}.dat'.format(category))
+
+data, category = train[4000]
+write_input_data(data, 'result/binary_net.x.4000.{}.dat'.format(category))
+
+data, category = train[8000]
+write_input_data(data, 'result/binary_net.x.8000.{}.dat'.format(category))
